@@ -9,9 +9,24 @@ defmodule Exbot.Message do
 
     case Regex.scan(command_regex, val) do
       [[_, user, "PRIVMSG", channel, message]] ->
-        {:privmsg, %{user: user, channel: String.trim(channel), message: message}}
+        {
+          :privmsg,
+          %{
+            user: user,
+            channel: String.trim(channel),
+            message: String.trim(message)
+          }
+        }
       [[_, user, command, params, comment]] ->
-        {:srvmsg, %{user: user, command: command, params: params, comment: comment}}
+        {
+          :srvmsg,
+          %{
+            user: user,
+            command: command,
+            params: params,
+            comment: comment
+          }
+        }
       [] ->
         {:unknown, val}
     end

@@ -7,7 +7,9 @@ defmodule Exbot.Application do
 
   @impl true
   def start(_type, _args) do
-    children = []
+    children = [
+      {Task.Supervisor, name: Exbot.TaskSupervisor}
+    ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
     # for other strategies and supported options
