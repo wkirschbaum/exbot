@@ -1,4 +1,4 @@
-defmodule Exbot.Message do
+defmodule Exbot.Handler do
   def handle("PING " <> val) do
     {:ping, val}
   end

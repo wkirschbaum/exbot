@@ -1,7 +1,7 @@
 defmodule Exbot do
   require Logger
 
-  alias Exbot.Message
+  alias Exbot.Handler
 
   def start do
     opts = [:binary, active: false, reuseaddr: true, packet: :line]
@@ -13,7 +13,6 @@ defmodule Exbot do
         with :ok <- send_message(socket, user_command("exbot")),
              :ok <- send_message(socket, nick_command("exbot")),
              :ok <- send_message(socket, join_command("##peirama")) do
-          Logger.info("listening..")
 
           listen(socket)
         else
@@ -32,7 +31,7 @@ defmodule Exbot do
     case :gen_tcp.recv(socket, 0, :timer.minutes(4)) do
       {:ok, message_text} ->
         Task.Supervisor.start_child(Exbot.TaskSupervisor, fn ->
-          message = Message.handle(message_text)
+          message = Handler.handle(message_text)
           handle_message(socket, message)
         end)
 
@@ -56,17 +55,16 @@ defmodule Exbot do
   end
 
   defp handle_message(socket, {:privmsg, val}) do
+    Logger.info("PRIVMSG: #{val.user}: #{val.message}")
+
     cond do
       # match on mention
       Regex.match?(~r/\bexbot\b/, val.message) ->
         send_message(socket, privmsg(val.channel, "hi"))
 
-      # match on comma start
-      Regex.match?(~r/^,.+/, val.message) ->
-        send_message(socket, privmsg(val.channel, "hi"))
+      true ->
+        nil
     end
-
-    IO.puts(val.user <> ": " <> val.message)
   end
 
   defp handle_message(_socket, {:srvmsg, val}) do
