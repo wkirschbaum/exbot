@@ -49,7 +49,13 @@ defmodule Exbot do
   end
 
   defp handle_message(_socket, {:unknown, val}) do
-    Logger.warn("Unknown input: #{val}")
+    IO.puts(String.trim(val))
+    # Logger.warn("Unknown input: #{val}")
+  end
+
+  defp handle_message(_socket, {:command, val}) do
+    IO.puts("COMMAND: #{val}")
+    # Logger.warn("Unknown input: #{val}")
   end
 
   defp handle_message(_socket, {:command, %{message: _message} = val}) do
