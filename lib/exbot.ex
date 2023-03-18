@@ -6,8 +6,6 @@ defmodule Exbot do
   def start do
     opts = [:binary, active: false, reuseaddr: true, packet: :line]
 
-    # irc.libera.chat
-
     case :gen_tcp.connect('localhost', 6667, opts) do
       {:ok, socket} ->
         with :ok <- send_message(socket, user_command("exbot")),
