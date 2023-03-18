@@ -12,7 +12,7 @@ defmodule Exbot do
       {:ok, socket} ->
         with :ok <- send_message(socket, user_command("exbot")),
              :ok <- send_message(socket, nick_command("exbot")),
-             :ok <- send_message(socket, join_command("##peirama")) do
+             :ok <- send_message(socket, join_command("##exbot")) do
 
           listen(socket)
         else
